@@ -1,0 +1,16 @@
+[
+    {"DESCRIPTION":" GET/scores can take optional ?query limit and direction(ASC or DSC). This allows the fetching top 20 results, or bottom 5 results etc",
+    "EXAMPLE:":" GET /api/scores?limit=5&direction=ASC"},
+
+    {"DESCRIPTION":" GET/scores/:user_id can take optional ?query limit and direction(ASC or DSC). This allows the fetching of one player's historic scores as per kept in the database",
+    "EXAMPLE:":" GET /api/scores?limit=5&direction=ASC"},
+
+     {"DESCRIPTION":" GET/users can take optional ?query limit and direction(ASC or DSC) OR username. This allows the fetching top 20 results, or bottom 5 results etc or fetching of one user only",
+    "EXAMPLE:":" GET /api/users?limit=5&direction=ASC OR GET /api/users?username=Alfie"},
+
+    {"DESCRIPTION":" POST/user can create a new user. Supply a body along with the post request with the required details as follows {username='Bob'}",
+    "EXAMPLE:":" POST /api/user"},
+
+     {"DESCRIPTION":" POST/score can submit a players score to the leaderboard. Supply a body along with the post request with the required details as follows {score= 657, user_id ='7'}",
+    "EXAMPLE:":" POST /api/user"}
+]
