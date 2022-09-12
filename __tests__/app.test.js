@@ -64,7 +64,7 @@ describe("GET/api/scores", () => {
 describe("GET/api/scores/userScores/:user_id", () => {
   it("return all the scores of ONE user and return it with the correct data type", () => {
     return request(app)
-      .get("/api/scores/userScores/3")
+      .get("/api/scores/userScores/jason")
       .expect(200)
       .then(({ body: { personalScores } }) => {
         expect(personalScores).toHaveLength(7);
@@ -81,7 +81,7 @@ describe("GET/api/scores/userScores/:user_id", () => {
   });
   it("return all the scores of ONE user and return it in ascending order", () => {
     return request(app)
-      .get("/api/scores/userScores/3?direction=ASC")
+      .get("/api/scores/userScores/jason?direction=ASC")
       .expect(200)
       .then(({ body: { personalScores } }) => {
         personalScores.forEach((userScores) => {
@@ -96,7 +96,7 @@ describe("GET/api/scores/userScores/:user_id", () => {
 
   it("return all the scores of ONE user and return it in ascending order and limited to 3 entries", () => {
     return request(app)
-      .get("/api/scores/userScores/3?direction=ASC&limit=3")
+      .get("/api/scores/userScores/jason?direction=ASC&limit=3")
       .expect(200)
       .then(({ body: { personalScores } }) => {
         expect(personalScores.length === 3);
@@ -166,19 +166,19 @@ describe("GET/api/users/", () => {
 ///// tests for POST SCORE ////
 describe("POST/score", () => {
   it("return 201 if successfully posted a score", () => {
-    const scoreToPost = { score: 4, user_id: 3 };
+    const scoreToPost = { score: 4, username: "jason" };
     return request(app).post("/api/scores").send([scoreToPost]).expect(201);
   });
 
   it("check to see if score is posted correctly", () => {
-    const scoreToPost = { score: 1011, user_id: 2 };
+    const scoreToPost = { score: 1011, username: "jim" };
     return request(app)
       .post("/api/scores")
       .send([scoreToPost])
       .expect(201)
       .then(({ body: { putScore } }) => {
         expect(putScore[0].score).toEqual(1011);
-        expect(putScore[0].user_id).toEqual(2);
+        expect(putScore[0].user_id).toBe(2);
       });
   });
 });

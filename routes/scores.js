@@ -6,6 +6,6 @@ const express = require("express");
 const router = express.Router();
 
 router.route("/").get(getScores).post(postScore);
-router.route("/userScores/:user_id").get(getPersonalScoreHistory);
+router.route("/userScores/:username").get(getPersonalScoreHistory);
 
 module.exports = router;
