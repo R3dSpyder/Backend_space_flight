@@ -1,7 +1,7 @@
 const db = require("../db/connection.js");
 
 const fetchScores = async (limit = null, direction = "ASC") => {
-  let queryString = `SELECT * FROM scores ORDER BY score ${direction}`;
+  let queryString = `SELECT * FROM scores INNER JOIN users ON scores.user_id = users.user_id ORDER BY score ${direction}`;
 
   if (limit !== null) {
     queryString += ` LIMIT ${limit}`;
