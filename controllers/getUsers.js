@@ -9,7 +9,7 @@ const getUsers = async (req, res, next) => {
     );
 
     if (userResults.length > 0) {
-      res.status(200).send(userResults);
+      res.status(200).send({ users: userResults });
     }
   } catch (error) {
     res.status(400).send({ error: error });

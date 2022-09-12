@@ -7,7 +7,7 @@ const getScore = async (req, res, next) => {
       req.query.direction
     );
     if (scoreResults.length > 0) {
-      res.status(200).send(scoreResults);
+      res.status(200).send({ scores: scoreResults });
     }
   } catch (error) {
     res.status(400).send({ error: error });

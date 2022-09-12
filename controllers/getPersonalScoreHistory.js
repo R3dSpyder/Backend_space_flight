@@ -8,7 +8,7 @@ const getPersonalScoreHistory = async (req, res, next) => {
       req.query.direction
     );
     if (scoreHistory.length > 0) {
-      res.status(200).send(scoreHistory);
+      res.status(200).send({ personalScores: scoreHistory });
     }
   } catch (error) {
     res.status(400).send({ error: error });

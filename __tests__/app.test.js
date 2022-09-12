@@ -17,17 +17,17 @@ describe("GET/api/scores", () => {
     return request(app)
       .get("/api/scores?limit=3")
       .expect(200)
-      .then(({ body }) => {
-        expect(Array.isArray(body));
-        expect(typeof body[0] === "object").toBe(true);
+      .then(({ body: { scores } }) => {
+        expect(Array.isArray(scores));
+        expect(typeof scores[0] === "object").toBe(true);
       });
   });
   it("The objects have a score value which is of type number", () => {
     return request(app)
       .get("/api/scores?limit=3")
       .expect(200)
-      .then(({ body }) => {
-        body.forEach((object, index) => {
+      .then(({ body: { scores } }) => {
+        scores.forEach((object, index) => {
           expect.objectContaining({ score: expect.any(Number) });
         });
       });
@@ -41,13 +41,14 @@ describe("GET/api/scores/userScores/:user_id", () => {
     return request(app)
       .get("/api/scores/userScores/3")
       .expect(200)
-      .then(({ body }) => {
-        expect(body).toHaveLength(7);
-        body.forEach((userScores) => {
+      .then(({ body: { personalScores } }) => {
+        expect(personalScores).toHaveLength(7);
+        personalScores.forEach((userScores) => {
+          expect(userScores.user_id).toBe(3);
           expect(userScores).toEqual({
             score_id: expect.any(Number),
-            user_id: expect.any(Number),
             score: expect.any(Number),
+            user_id: expect.any(Number),
             created_at: expect.any(String),
           });
         });
@@ -57,8 +58,8 @@ describe("GET/api/scores/userScores/:user_id", () => {
     return request(app)
       .get("/api/scores/userScores/3?direction=ASC")
       .expect(200)
-      .then(({ body }) => {
-        body.forEach((userScores) => {
+      .then(({ body: { personalScores } }) => {
+        personalScores.forEach((userScores) => {
           let previous = 0;
           expect(
             userScores.score > previous || userScores.score === previous
@@ -72,9 +73,9 @@ describe("GET/api/scores/userScores/:user_id", () => {
     return request(app)
       .get("/api/scores/userScores/3?direction=ASC&limit=3")
       .expect(200)
-      .then(({ body }) => {
-        expect(body.length === 3);
-        expect(body).toBeSortedBy("score", {
+      .then(({ body: { personalScores } }) => {
+        expect(personalScores.length === 3);
+        expect(personalScores).toBeSortedBy("score", {
           ascending: true,
           coerce: true,
         });
@@ -89,9 +90,9 @@ describe("GET/api/users/", () => {
     return request(app)
       .get("/api/users?username=james")
       .expect(200)
-      .then(({ body }) => {
-        expect(body).toHaveLength(1);
-        expect(body[0].username).toEqual("james");
+      .then(({ body: { users } }) => {
+        expect(users).toHaveLength(1);
+        expect(users[0].username).toEqual("james");
       });
   });
 });
@@ -101,9 +102,9 @@ describe("GET/api/users/", () => {
     return request(app)
       .get("/api/users")
       .expect(200)
-      .then(({ body }) => {
-        expect(body).toHaveLength(12);
-        expect(body).toBeSortedBy("username", {
+      .then(({ body: { users } }) => {
+        expect(users).toHaveLength(12);
+        expect(users).toBeSortedBy("username", {
           ascending: true,
         });
       });
@@ -113,9 +114,9 @@ describe("GET/api/users/", () => {
     return request(app)
       .get("/api/users?direction=DESC&limit=5")
       .expect(200)
-      .then(({ body }) => {
-        expect(body).toHaveLength(5);
-        expect(body).toBeSortedBy("username", {
+      .then(({ body: { users } }) => {
+        expect(users).toHaveLength(5);
+        expect(users).toBeSortedBy("username", {
           descending: true,
         });
       });
@@ -125,8 +126,8 @@ describe("GET/api/users/", () => {
     return request(app)
       .get("/api/users/")
       .expect(200)
-      .then(({ body }) => {
-        body.forEach((user) => {
+      .then(({ body: { users } }) => {
+        users.forEach((user) => {
           expect(user).toEqual({
             user_id: expect.any(Number),
             username: expect.any(String),
@@ -150,9 +151,9 @@ describe("POST/score", () => {
       .post("/api/scores")
       .send([scoreToPost])
       .expect(201)
-      .then(({ body }) => {
-        expect(body[0].score).toEqual(1011);
-        expect(body[0].user_id).toEqual(2);
+      .then(({ body: { putScore } }) => {
+        expect(putScore[0].score).toEqual(1011);
+        expect(putScore[0].user_id).toEqual(2);
       });
   });
 });
@@ -165,8 +166,8 @@ describe("POST/user", () => {
       .post("/api/users")
       .send([postUser])
       .expect(201)
-      .then(({ body }) => {
-        expect(body[0].username).toEqual("Mark");
+      .then(({ body: { putUser } }) => {
+        expect(putUser[0].username).toEqual("Mark");
       });
   });
 });
