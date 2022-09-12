@@ -15,7 +15,7 @@ afterAll(() => {
 describe("GET/api/scores", () => {
   it("return an array of objects", () => {
     return request(app)
-      .get("/api/scores?limit=3")
+      .get("/api/scores")
       .expect(200)
       .then(({ body: { scores } }) => {
         expect(Array.isArray(scores));
@@ -24,11 +24,36 @@ describe("GET/api/scores", () => {
   });
   it("The objects have a score value which is of type number", () => {
     return request(app)
-      .get("/api/scores?limit=3")
+      .get("/api/scores")
       .expect(200)
       .then(({ body: { scores } }) => {
         scores.forEach((object, index) => {
           expect.objectContaining({ score: expect.any(Number) });
+        });
+      });
+  });
+  it("successfully return a limit of 3 returned scores", () => {
+    return request(app)
+      .get("/api/scores?limit=3")
+      .expect(200)
+      .then(({ body: { scores } }) => {
+        expect(scores.length === 3);
+        scores.forEach((object, index) => {
+          expect.objectContaining({ score: expect.any(Number) });
+        });
+      });
+  });
+
+  it("default return is ascending order, test for return of descending order + limit of 3", () => {
+    return request(app)
+      .get("/api/scores?limit=3&direction=DESC")
+      .expect(200)
+      .then(({ body: { scores } }) => {
+        scores.forEach((object, index) => {
+          expect(scores).toBeSortedBy("score", {
+            descending: true,
+            coerce: true,
+          });
         });
       });
   });
