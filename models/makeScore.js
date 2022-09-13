@@ -2,7 +2,8 @@ const db = require("../db/connection.js");
 
 const makeScore = async (score, user) => {
   try {
-    const nameQuery = `INSERT IGNORE INTO users(username) VALUES('${user}') ON CONFLICT (username)DO NOTHING;`;
+    const nameQuery = `INSERT INTO users (username) SELECT '${user}' WHERE NOT EXISTS (SELECT username FROM users WHERE username = '${user}');
+`;
     const checkIfNameExists = await db.query(nameQuery);
     const stringQuery = `INSERT INTO scores(score, user_id) VALUES (${score}, (SELECT user_id FROM users WHERE username='${user}')) RETURNING *;`;
     const insertScore = await db.query(stringQuery);
