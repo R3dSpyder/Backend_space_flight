@@ -1,9 +1,9 @@
 const makeUser = require("../models/makeUser.js");
 
 const postUser = async (req, res, next) => {
-  if (req.body[0].username) {
+  if (req.body.username) {
     try {
-      const putUser = await makeUser(req.body[0].username);
+      const putUser = await makeUser(req.body.username);
       if (putUser) {
         res.status(201).send({ putUser: putUser });
       }
