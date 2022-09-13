@@ -7,7 +7,7 @@ const seed = async ({ users, scores }) => {
 
   await db.query(`CREATE TABLE users(
         user_id SERIAL PRIMARY KEY,
-        username VARCHAR NOT NULL UNIQUE,
+        username VARCHAR UNIQUE NOT NULL,
         created_at TIMESTAMP DEFAULT NOW());`);
 
   await db.query(`CREATE TABLE scores(
