@@ -5,7 +5,7 @@ const postUser = async (req, res, next) => {
     try {
       const putUser = await makeUser(req.body.username);
       if (putUser) {
-        res.status(201).send({ putUser: putUser });
+        res.status(201).send({ putUser: putUser[0] });
       }
     } catch (error) {
       res.status(400).send({ error: error });

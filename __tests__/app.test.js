@@ -167,18 +167,18 @@ describe("GET/api/users/", () => {
 describe("POST/score", () => {
   it("return 201 if successfully posted a score", () => {
     const scoreToPost = { score: 4, username: "jason" };
-    return request(app).post("/api/scores").send([scoreToPost]).expect(201);
+    return request(app).post("/api/scores").send(scoreToPost).expect(201);
   });
 
   it("check to see if score is posted correctly", () => {
-    const scoreToPost = { score: 1011, username: "jim" };
+    const scoreToPost = { score: 1011, username: "carl" };
     return request(app)
       .post("/api/scores")
-      .send([scoreToPost])
+      .send(scoreToPost)
       .expect(201)
       .then(({ body: { putScore } }) => {
-        expect(putScore[0].score).toEqual(1011);
-        expect(putScore[0].user_id).toBe(2);
+        expect(putScore.score).toBe(1011);
+        expect(putScore.user_id).toBe(12);
       });
   });
 });
@@ -189,10 +189,10 @@ describe("POST/user", () => {
     const postUser = { username: "Mark" };
     return request(app)
       .post("/api/users")
-      .send([postUser])
+      .send(postUser)
       .expect(201)
       .then(({ body: { putUser } }) => {
-        expect(putUser[0].username).toEqual("Mark");
+        expect(putUser.username).toEqual("Mark");
       });
   });
 });
