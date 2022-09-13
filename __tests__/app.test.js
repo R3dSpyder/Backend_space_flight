@@ -163,7 +163,7 @@ describe("GET/api/users/", () => {
   });
 });
 
-///// tests for POST SCORE ////
+/// tests for POST SCORE ////
 describe("POST/score", () => {
   it("return 201 if successfully posted a score", () => {
     const scoreToPost = { score: 4, username: "jason" };
@@ -183,7 +183,7 @@ describe("POST/score", () => {
   });
 });
 
-///// tests for POST user ////
+/// tests for POST user ////
 describe("POST/user", () => {
   it("return 201 if successfully posted a score", () => {
     const postUser = { username: "Mark" };
@@ -193,6 +193,32 @@ describe("POST/user", () => {
       .expect(201)
       .then(({ body: { putUser } }) => {
         expect(putUser[0].username).toEqual("Mark");
+      });
+  });
+});
+
+describe("GET api/scoreboard", () => {
+  it("returns 200 and an array of scoreboard entries", () => {
+    return request(app)
+      .get("/api/scoreboard")
+      .expect(200)
+      .then(({ body }) => {
+        const { scores } = body;
+        expect(scores).toHaveLength(5);
+      });
+  });
+});
+
+describe("POST api/scoreboard", () => {
+  it("adds a username and score to the scoreboard table", () => {
+    return request(app)
+      .post("/api/scoreboard")
+      .send({ username: "posted", score: 5000 })
+      .expect(201)
+      .then(({ body }) => {
+        const { score } = body;
+        expect(score.username).toBe("posted");
+        expect(score.score).toBe(5000);
       });
   });
 });
