@@ -12,7 +12,7 @@ const postScore = async (req, res, next) => {
     }
   } else {
     res.status(500).send({
-      error: "You must supply a score and user ID",
+      error: "You must supply a score and username",
     });
   }
 };
