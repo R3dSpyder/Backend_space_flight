@@ -6,7 +6,7 @@ const postScore = async (req, res, next) => {
     try {
       const putScore = await makeScore(req.body.score, req.body.username);
       if (putScore.length > 0) {
-        res.status(201).send({ putScore: putScore });
+        res.status(201).send({ putScore: putScore[0] });
       }
     } catch (error) {
       res.status(400).send({ error: error });
