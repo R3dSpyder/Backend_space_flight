@@ -7,5 +7,4 @@ const router = express.Router();
 
 router.route("/").get(getScores).post(postScore);
 router.route("/userScores/:username").get(getPersonalScoreHistory);
-
 module.exports = router;
