@@ -1,9 +1,9 @@
 const makeScore = require("../models/makeScore.js");
 
 const postScore = async (req, res, next) => {
-  if (req.body[0].score && req.body[0].username) {
+  if (req.body.score && req.body.username) {
     try {
-      const putScore = await makeScore(req.body[0].score, req.body[0].username);
+      const putScore = await makeScore(req.body.score, req.body.username);
       if (putScore.length > 0) {
         res.status(201).send({ putScore: putScore });
       }
