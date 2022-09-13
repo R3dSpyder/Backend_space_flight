@@ -11,4 +11,5 @@ module.exports = [
   { score: 5000, user_id: 3 },
   { score: 60, user_id: 3 },
   { score: 3, user_id: 12 },
+  { score: 37, user_id: 12 },
 ];
