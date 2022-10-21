@@ -1,14 +1,15 @@
 const db = require("../db/connection.js");
+const format = require("pg-format");
 
 const fetchUsers = async (limit = null, direction = "ASC", username = null) => {
-  let queryString = `SELECT * FROM users`;
+  let queryString = "SELECT * FROM users";
 
   if (username != null) {
-    queryString += ` WHERE username='${username}'`;
+    queryString += format(" WHERE username=%L", username);
   } else {
-    queryString += ` ORDER BY username ${direction}`;
+    queryString += format(" ORDER BY username %s", direction);
     if (limit != null) {
-      queryString += ` LIMIT ${limit}`;
+      queryString += format(" LIMIT %L", limit);
     }
   }
   queryString += ";";

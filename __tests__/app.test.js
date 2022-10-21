@@ -19,7 +19,10 @@ describe("GET/api/scores", () => {
       .expect(200)
       .then(({ body: { scores } }) => {
         expect(Array.isArray(scores));
-        expect(typeof scores[0] === "object").toBe(true);
+        scores.forEach((object, index) => {
+          expect(!Array.isArray(object));
+          expect(typeof object === "object").toBe(true);
+        });
       });
   });
   it("The objects have a score value which is of type number", () => {
@@ -49,11 +52,10 @@ describe("GET/api/scores", () => {
       .get("/api/scores?limit=3&direction=DESC")
       .expect(200)
       .then(({ body: { scores } }) => {
-        scores.forEach((object, index) => {
-          expect(scores).toBeSortedBy("score", {
-            descending: true,
-            coerce: true,
-          });
+        expect(scores).toHaveLength(3);
+        expect(scores).toBeSortedBy("score", {
+          descending: true,
+          coerce: true,
         });
       });
   });
@@ -165,12 +167,12 @@ describe("GET/api/users/", () => {
 
 ///// tests for POST SCORE ////
 describe("POST/score", () => {
-  it("return 201 if successfully posted a score", () => {
+  it("return 201 if a successful database action is performed", () => {
     const scoreToPost = { score: 4, username: "jason" };
     return request(app).post("/api/scores").send(scoreToPost).expect(201);
   });
 
-  it("check to see if score is posted correctly", () => {
+  it("check to see if the posted content is returned properly indicating success", () => {
     const scoreToPost = { score: 1011, username: "carl" };
     return request(app)
       .post("/api/scores")
@@ -181,11 +183,22 @@ describe("POST/score", () => {
         expect(putScore.user_id).toBe(12);
       });
   });
+
+  it("check for error if invalid value: no score", () => {
+    const scoreToPost = {};
+    return request(app)
+      .post("/api/scores")
+      .send(scoreToPost)
+      .expect(400)
+      .then(({ body: { error } }) => {
+        expect(error).toBe("Invalid value");
+      });
+  });
 });
 
 ///// tests for POST user ////
 describe("POST/user", () => {
-  it("return 201 if successfully posted a score", () => {
+  it("return 201 if a successful database action is performed", () => {
     const postUser = { username: "Mark" };
     return request(app)
       .post("/api/users")
@@ -193,6 +206,37 @@ describe("POST/user", () => {
       .expect(201)
       .then(({ body: { putUser } }) => {
         expect(putUser.username).toEqual("Mark");
+      });
+  });
+
+  it("check to see if the posted content is returned properly indicating success", () => {
+    const postUser = { username: "Mark" };
+    return request(app)
+      .post("/api/users")
+      .send(postUser)
+      .expect(201)
+      .then(({ body: { putUser } }) => {
+        expect(putUser.username).toEqual("Mark");
+      });
+  });
+  it("check for error if invalid value: no user", () => {
+    const postUser = {};
+    return request(app)
+      .post("/api/users")
+      .send(postUser)
+      .expect(400)
+      .then(({ body: { error } }) => {
+        expect(error).toBe("Invalid value");
+      });
+  });
+  it("check for error if invalid value: username contains symbols", () => {
+    const postUser = { username: "@Mark" };
+    return request(app)
+      .post("/api/users")
+      .send(postUser)
+      .expect(400)
+      .then(({ body: { error } }) => {
+        expect(error).toBe("Invalid value");
       });
   });
 });

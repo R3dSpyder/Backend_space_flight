@@ -1,8 +1,12 @@
 const fetchPersonalScoreHistory = require("../models/fetchPersonalScoreHistory.js");
+const { validationResult } = require("express-validator");
 
 const getPersonalScoreHistory = async (req, res, next) => {
-  if (req.params.username) {
-    try {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array()[0].msg });
+    } else {
       const scoreHistory = await fetchPersonalScoreHistory(
         req.params.username,
         req.query.limit,
@@ -11,11 +15,10 @@ const getPersonalScoreHistory = async (req, res, next) => {
       if (scoreHistory.length > 0) {
         res.status(200).send({ personalScores: scoreHistory });
       }
-    } catch (error) {
-      res.status(400).send({ error: error });
     }
-  } else {
-    res.status(400).send({ error: "please provide a username" });
+  } catch (error) {
+    console.log(error, "<<");
+    res.status(500).send({ error: `Internal SQL ERROR: ${error}` });
   }
 };
 

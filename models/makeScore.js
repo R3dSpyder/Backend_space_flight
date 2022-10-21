@@ -1,15 +1,24 @@
 const db = require("../db/connection.js");
+const format = require("pg-format");
 
 const makeScore = async (score, user) => {
   try {
-    const nameQuery = `INSERT INTO users (username) SELECT '${user}' WHERE NOT EXISTS (SELECT username FROM users WHERE username = '${user}');
-`;
-    const checkIfNameExists = await db.query(nameQuery);
-    const stringQuery = `INSERT INTO scores(score, user_id) VALUES (${score}, (SELECT user_id FROM users WHERE username='${user}')) RETURNING *;`;
+    const nameQuery = format(
+      "INSERT INTO users (username) SELECT %L WHERE NOT EXISTS (SELECT username FROM users WHERE username = %L)",
+      user,
+      user
+    );
+
+    await db.query(nameQuery);
+    const stringQuery = format(
+      "INSERT INTO scores(score, user_id) VALUES (%s, (SELECT user_id FROM users WHERE username=%L)) RETURNING *;",
+      score,
+      user
+    );
+
     const insertScore = await db.query(stringQuery);
 
     if (insertScore.rows.length > 0) {
-      console.log(insertScore.rows);
       return insertScore.rows;
     }
   } catch (error) {

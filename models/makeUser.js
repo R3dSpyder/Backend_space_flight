@@ -1,8 +1,12 @@
 const db = require("../db/connection.js");
+const format = require("pg-format");
 
 const makeUser = async (username) => {
   try {
-    const stringQuery = `INSERT INTO users(username) VALUES('${username}') RETURNING *;`;
+    const stringQuery = format(
+      "INSERT INTO users(username) VALUES(%L) RETURNING *;",
+      username
+    );
 
     const insertUser = await db.query(stringQuery);
 
