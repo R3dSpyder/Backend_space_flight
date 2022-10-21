@@ -1,7 +1,7 @@
 const fetchPersonalScoreHistory = require("../models/fetchPersonalScoreHistory.js");
 const { validationResult } = require("express-validator");
 
-const getPersonalScoreHistory = async (req, res, next) => {
+const getPersonalScoreHistory = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -1,7 +1,7 @@
 const makeScore = require("../models/makeScore.js");
 const { validationResult } = require("express-validator");
 
-const postScore = async (req, res, next) => {
+const postScore = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

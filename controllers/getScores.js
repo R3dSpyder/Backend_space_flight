@@ -1,7 +1,7 @@
 const fetchScores = require("../models/fetchScores.js");
 const { validationResult } = require("express-validator");
 
-const getScore = async (req, res, next) => {
+const getScore = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -1,6 +1,6 @@
 const fetchUsers = require("../models/fetchUsers.js");
 const { validationResult } = require("express-validator");
-const getUsers = async (req, res, next) => {
+const getUsers = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
